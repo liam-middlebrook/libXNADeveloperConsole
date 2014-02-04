@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+using XNA_DevConsole.DevConsole;
+
 namespace XNA_DevConsole
 {
     /// <summary>
@@ -19,10 +21,17 @@ namespace XNA_DevConsole
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        KeyboardHelper keyHelper;
+
+        Color backgroudColor = Color.CornflowerBlue;
+
+        ConsoleWindow console;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            keyHelper = new KeyboardHelper();
         }
 
         /// <summary>
@@ -35,6 +44,10 @@ namespace XNA_DevConsole
         {
             // TODO: Add your initialization logic here
 
+            console = new ConsoleWindow();
+
+            console.commandList.Add("changecolor", new ConsoleCommand("changecolor", (string args) => { backgroudColor = Color.Red; return 0; }));
+
             base.Initialize();
         }
 
@@ -46,6 +59,9 @@ namespace XNA_DevConsole
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            console.font = Content.Load<SpriteFont>("Consolas");
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -66,10 +82,12 @@ namespace XNA_DevConsole
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            keyHelper.UpdateKeyStates();
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            console.Update(keyHelper);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -81,9 +99,15 @@ namespace XNA_DevConsole
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(backgroudColor);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+
+            console.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
