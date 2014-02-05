@@ -193,6 +193,11 @@ namespace XNA_DevConsole
                 gem.Draw(spriteBatch);
             }
 
+            if (!console.isActive)
+            {
+                spriteBatch.DrawString(console.font, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
+            }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
