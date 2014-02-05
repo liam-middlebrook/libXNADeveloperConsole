@@ -244,10 +244,12 @@ namespace XNA_DevConsole.DevConsole
             string[] color = args.Split(' ');
 
             formatError = formatError
-                            || color.Length < 3
-                            || (color[0] == string.Empty)
-                            || (color[1] == string.Empty)
-                            || (color[2] == string.Empty);
+                                         || color.Length < 3
+                                         || (color[0] == string.Empty)
+                                         || (color[1] == string.Empty)
+                                         || (color[2] == string.Empty)
+                                         || (color.Length > 3 && color[3] == string.Empty);
+
 
             if (formatError)
             {
