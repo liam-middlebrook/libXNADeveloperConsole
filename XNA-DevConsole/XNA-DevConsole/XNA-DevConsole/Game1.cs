@@ -27,11 +27,18 @@ namespace XNA_DevConsole
 
         ConsoleWindow console;
 
+
+        List<GemGameDemo.Gem> gemList;
+        Texture2D gemTexture;
+        Random rand;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             keyHelper = new KeyboardHelper();
+            gemList = new List<GemGameDemo.Gem>();
+            rand = new Random();
         }
 
         /// <summary>
@@ -80,6 +87,47 @@ namespace XNA_DevConsole
                         return 0;
                     }));
 
+            console.commandList.Add("addgem",
+                new ConsoleCommand("addgem",
+                    (string args, LimitedMessageQueue logQueue) =>
+                    {
+                        bool formatError = false;
+
+                        formatError = (args == string.Empty);
+
+                        string[] color = args.Split(' ');
+
+                        formatError = formatError
+                                        || color.Length < 3
+                                        || (color[0] == string.Empty)
+                                        || (color[1] == string.Empty)
+                                        || (color[2] == string.Empty)
+                                        || (color.Length > 3 && color[3] == string.Empty);
+
+                        if (formatError)
+                        {
+                            logQueue.Enqueue("Error AddGem is the following format:\n"
+                                + "AddGem <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
+                            return -1;
+                        }
+
+                        Color gemColor = new Color(
+                            (int)MathHelper.Clamp(int.Parse(color[0]), 0, 255),
+                            (int)MathHelper.Clamp(int.Parse(color[1]), 0, 255),
+                            (int)MathHelper.Clamp(int.Parse(color[2]), 0, 255),
+                            color.Length > 3 ? (int)MathHelper.Clamp(int.Parse(color[3]), 0, 255) : 255
+                            );
+
+                        gemList.Add(
+                            new GemGameDemo.Gem(
+                                new Vector2(rand.Next(0, graphics.PreferredBackBufferWidth), rand.Next(0, graphics.PreferredBackBufferHeight)),
+                                gemTexture,
+                                gemColor
+                                ));
+
+                        return 0;
+                    }));
+
             base.Initialize();
         }
 
@@ -93,7 +141,7 @@ namespace XNA_DevConsole
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             console.font = Content.Load<SpriteFont>("Consolas");
-
+            gemTexture = Content.Load<Texture2D>("gem");
 
             // TODO: use this.Content to load your game content here
         }
@@ -139,6 +187,11 @@ namespace XNA_DevConsole
             spriteBatch.Begin();
 
             console.Draw(spriteBatch);
+
+            foreach (GemGameDemo.Gem gem in gemList)
+            {
+                gem.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 

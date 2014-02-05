@@ -44,7 +44,7 @@ namespace XNA_DevConsole.DevConsole
                     "help",
                     (string args, LimitedMessageQueue logQueue) =>
                     {
-                        logQueue.DataLimit = commandList.Keys.Count + 1; 
+                        logQueue.DataLimit = commandList.Keys.Count + 1;
                         foreach (string command in commandList.Keys)
                         {
                             logQueue.Enqueue(command);
@@ -197,7 +197,7 @@ namespace XNA_DevConsole.DevConsole
                     }
                     lineDelay = false;
                 }
-                else if(!lineDelay)
+                else if (!lineDelay)
                 {
                     lineDelay = true;
                     for (int i = lineHistory.Length - 1; i > 0; i--)
@@ -244,11 +244,11 @@ namespace XNA_DevConsole.DevConsole
             string[] color = args.Split(' ');
 
             formatError = formatError
-                                         || color.Length < 3
-                                         || (color[0] == string.Empty)
-                                         || (color[1] == string.Empty)
-                                         || (color[2] == string.Empty)
-                                         || (color.Length > 3 && color[3] == string.Empty);
+                             || color.Length < 3
+                             || (color[0] == string.Empty)
+                             || (color[1] == string.Empty)
+                             || (color[2] == string.Empty)
+                             || (color.Length > 3 && color[3] == string.Empty);
 
 
             if (formatError)
