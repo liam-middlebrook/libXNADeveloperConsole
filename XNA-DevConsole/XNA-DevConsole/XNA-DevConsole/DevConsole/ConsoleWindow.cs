@@ -42,20 +42,20 @@ namespace XNA_DevConsole.DevConsole
                 "help",
                 new ConsoleCommand(
                     "help",
-                    (string args) =>
+                    (string args, LimitedMessageQueue logQueue) =>
                     {
-                        loggingQueue.DataLimit = commandList.Keys.Count+1; 
+                        logQueue.DataLimit = commandList.Keys.Count + 1; 
                         foreach (string command in commandList.Keys)
                         {
-                            loggingQueue.Enqueue(command);
+                            logQueue.Enqueue(command);
                         }
-                        loggingQueue.Enqueue("List of Valid Commands:");
+                        logQueue.Enqueue("List of Valid Commands:");
                         return 0;
                     }));
 
-            commandList.Add("exit", new ConsoleCommand("exit", (string args) => { Environment.Exit(0); return 0; }));
-            commandList.Add("echo", new ConsoleCommand("echo", (string args) => { loggingQueue.Enqueue(args); return 0; }));
-            commandList.Add("clear", new ConsoleCommand("clear", (string args) => { loggingQueue.Clear(); return 0; }));
+            commandList.Add("exit", new ConsoleCommand("exit", (string args, LimitedMessageQueue logQueue) => { Environment.Exit(0); return 0; }));
+            commandList.Add("echo", new ConsoleCommand("echo", (string args, LimitedMessageQueue logQueue) => { logQueue.Enqueue(args); return 0; }));
+            commandList.Add("clear", new ConsoleCommand("clear", (string args, LimitedMessageQueue logQueue) => { logQueue.Clear(); return 0; }));
             commandList.Add("changefontcolor", new ConsoleCommand("changefontcolor", ChangeFontColor));
             lineBuffer = string.Empty;
             fontColor = Color.White;
@@ -194,7 +194,7 @@ namespace XNA_DevConsole.DevConsole
                     args = string.Join(" ", line.Skip(1));
                     if (commandList.ContainsKey(line[0]))
                     {
-                        commandList[line[0]].Function(args);
+                        commandList[line[0]].Function(args, loggingQueue);
                     }
                     else
                     {
@@ -218,9 +218,26 @@ namespace XNA_DevConsole.DevConsole
 
         #region BUILT_IN_COMMANDS
 
-        int ChangeFontColor(string args)
+        int ChangeFontColor(string args, LimitedMessageQueue logQueue)
         {
+            bool formatError = false;
+
+            formatError = (args == string.Empty);
+
             string[] color = args.Split(' ');
+
+            formatError = formatError
+                            || color.Length < 3
+                            || (color[0] == string.Empty)
+                            || (color[1] == string.Empty)
+                            || (color[2] == string.Empty);
+
+            if (formatError)
+            {
+                logQueue.Enqueue("Error ChangeFontColor is the following format:\n"
+                    + "changefontcolor <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
+                return -1;
+            }
 
             fontColor = new Color(
                 (int)MathHelper.Clamp(int.Parse(color[0]), 0, 255),

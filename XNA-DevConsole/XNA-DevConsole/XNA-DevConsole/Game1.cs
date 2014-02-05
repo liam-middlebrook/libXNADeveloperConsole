@@ -46,7 +46,38 @@ namespace XNA_DevConsole
 
             console = new ConsoleWindow();
 
-            console.commandList.Add("changecolor", new ConsoleCommand("changecolor", (string args) => { backgroudColor = Color.Red; return 0; }));
+            console.commandList.Add("changebackgroundcolor",
+                new ConsoleCommand("changebackgroundcolor",
+                    (string args, LimitedMessageQueue logQueue) =>
+                    {
+                        bool formatError = false;
+
+                        formatError = (args == string.Empty);
+
+                        string[] color = args.Split(' ');
+
+                        formatError = formatError
+                                        || color.Length < 3
+                                        || (color[0] == string.Empty)
+                                        || (color[1] == string.Empty)
+                                        || (color[2] == string.Empty);
+
+                        if (formatError)
+                        {
+                            logQueue.Enqueue("Error ChangeBackgroundColor is the following format:\n"
+                                + "changebackgroundcolor <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
+                            return -1;
+                        }
+
+                        backgroudColor = new Color(
+                            (int)MathHelper.Clamp(int.Parse(color[0]), 0, 255),
+                            (int)MathHelper.Clamp(int.Parse(color[1]), 0, 255),
+                            (int)MathHelper.Clamp(int.Parse(color[2]), 0, 255),
+                            color.Length > 3 ? (int)MathHelper.Clamp(int.Parse(color[3]), 0, 255) : 255
+                            );
+
+                        return 0;
+                    }));
 
             base.Initialize();
         }

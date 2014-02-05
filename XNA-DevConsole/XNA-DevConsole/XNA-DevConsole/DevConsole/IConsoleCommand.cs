@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNA_DevConsole.DevConsole
 {
-    delegate int ConsoleCommandDelegate(string args);
+    delegate int ConsoleCommandDelegate(string args, LimitedMessageQueue loggingQueue);
 
     interface IConsoleCommand
     {
