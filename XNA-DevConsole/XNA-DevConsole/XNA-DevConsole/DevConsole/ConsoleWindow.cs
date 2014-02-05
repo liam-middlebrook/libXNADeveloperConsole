@@ -253,7 +253,7 @@ namespace XNA_DevConsole.DevConsole
 
             if (formatError)
             {
-                logQueue.Enqueue("Error ChangeFontColor is the following format:\n"
+                logQueue.Enqueue("Error ChangeFontColor is the following format:\n\t"
                     + "changefontcolor <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
                 return -1;
             }

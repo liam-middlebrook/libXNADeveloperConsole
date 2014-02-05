@@ -72,7 +72,7 @@ namespace XNA_DevConsole
 
                         if (formatError)
                         {
-                            logQueue.Enqueue("Error ChangeBackgroundColor is the following format:\n"
+                            logQueue.Enqueue("Error ChangeBackgroundColor is the following format:\n\t"
                                 + "changebackgroundcolor <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
                             return -1;
                         }
@@ -106,7 +106,7 @@ namespace XNA_DevConsole
 
                         if (formatError)
                         {
-                            logQueue.Enqueue("Error AddGem is the following format:\n"
+                            logQueue.Enqueue("Error AddGem is the following format:\n\t"
                                 + "AddGem <R 0-255> <G 0-255> <B 0-255> (A 0-255)");
                             return -1;
                         }
@@ -186,7 +186,6 @@ namespace XNA_DevConsole
 
             spriteBatch.Begin();
 
-            console.Draw(spriteBatch);
 
             foreach (GemGameDemo.Gem gem in gemList)
             {
@@ -197,6 +196,8 @@ namespace XNA_DevConsole
             {
                 spriteBatch.DrawString(console.font, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
             }
+
+            console.Draw(spriteBatch);
 
             spriteBatch.End();
 
