@@ -26,13 +26,43 @@ namespace XNA_DevConsole.DevConsole
 
         public string lineBuffer;
 
+        private string[] lineHistory;
+
+        private int lineHistoryIndex;
+
+        private bool lineDelay;
+
+        LimitedMessageQueue loggingQueue;
+
         public ConsoleWindow()
         {
+            loggingQueue = new LimitedMessageQueue(5);
             commandList = new Dictionary<string, IConsoleCommand>();
+            commandList.Add(
+                "help",
+                new ConsoleCommand(
+                    "help",
+                    (string args) =>
+                    {
+                        loggingQueue.DataLimit = commandList.Keys.Count+1; 
+                        foreach (string command in commandList.Keys)
+                        {
+                            loggingQueue.Enqueue(command);
+                        }
+                        loggingQueue.Enqueue("List of Valid Commands:");
+                        return 0;
+                    }));
+
             commandList.Add("exit", new ConsoleCommand("exit", (string args) => { Environment.Exit(0); return 0; }));
+            commandList.Add("echo", new ConsoleCommand("echo", (string args) => { loggingQueue.Enqueue(args); return 0; }));
+            commandList.Add("clear", new ConsoleCommand("clear", (string args) => { loggingQueue.Clear(); return 0; }));
             commandList.Add("changefontcolor", new ConsoleCommand("changefontcolor", ChangeFontColor));
             lineBuffer = string.Empty;
-            fontColor = Color.Black;
+            fontColor = Color.White;
+            lineHistory = new string[5];
+            lineHistoryIndex = -1;
+            lineDelay = false;
+
         }
 
         public void Update(KeyboardHelper keyHelper)
@@ -57,6 +87,23 @@ namespace XNA_DevConsole.DevConsole
                         {
                             switch (pressedKeys[i])
                             {
+                                case Keys.OemPeriod:
+                                    lineBuffer += ".";
+                                    break;
+                                case Keys.OemComma:
+                                    lineBuffer += ",";
+                                    break;
+                                case Keys.LeftAlt:
+                                case Keys.LeftControl:
+                                case Keys.LeftShift:
+                                case Keys.LeftWindows:
+                                case Keys.RightAlt:
+                                case Keys.RightControl:
+                                case Keys.RightShift:
+                                case Keys.RightWindows:
+                                case Keys.CapsLock:
+                                case Keys.OemTilde:
+                                    break;
                                 case Keys.D0:
                                     lineBuffer += "0";
                                     break;
@@ -101,6 +148,28 @@ namespace XNA_DevConsole.DevConsole
                                         }
                                         break;
                                     }
+                                case Keys.Up:
+                                    {
+                                        if (lineHistoryIndex < lineHistory.Length - 1)
+                                        {
+                                            ++lineHistoryIndex;
+                                            lineBuffer = lineHistory[lineHistoryIndex];
+                                        }
+                                        break;
+                                    }
+                                case Keys.Down:
+                                    {
+                                        if (lineHistoryIndex >= 0)
+                                        {
+                                            --lineHistoryIndex;
+                                            lineBuffer = lineHistory[lineHistoryIndex];
+                                        }
+                                        else
+                                        {
+                                            lineBuffer = string.Empty;
+                                        }
+                                        break;
+                                    }
                                 default:
                                     {
                                         lineBuffer += (pressedKeys[i].ToString().ToLower() ?? string.Empty);
@@ -109,28 +178,42 @@ namespace XNA_DevConsole.DevConsole
                             }
                         }
                     }
+                    lineDelay = false;
                 }
-                else
+                else if(!lineDelay)
                 {
+                    lineDelay = true;
+                    for (int i = lineHistory.Length - 1; i > 0; i--)
+                    {
+                        lineHistory[i] = lineHistory[i - 1];
+                    }
+                    lineHistory[0] = lineBuffer;
+
                     string[] line = lineBuffer.Split(' ');
                     string args = string.Empty;
                     args = string.Join(" ", line.Skip(1));
-                    try
+                    if (commandList.ContainsKey(line[0]))
                     {
                         commandList[line[0]].Function(args);
                     }
-                    catch (KeyNotFoundException ex)
+                    else
                     {
-
+                        loggingQueue.Enqueue("Error: " + line[0] + " is NOT a valid command! Type Help for a list of valid commands!");
                     }
+
                     lineBuffer = string.Empty;
+                    keyHelper.UpdateKeyStates();
+                    lineHistoryIndex = -1;
                 }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, lineBuffer, Vector2.Zero, fontColor);
+            if (isActive)
+            {
+                spriteBatch.DrawString(font, "XNA Dev-Console\n | " + lineBuffer + " |" + "\n" + loggingQueue, Vector2.Zero, fontColor);
+            }
         }
 
         #region BUILT_IN_COMMANDS
@@ -138,19 +221,14 @@ namespace XNA_DevConsole.DevConsole
         int ChangeFontColor(string args)
         {
             string[] color = args.Split(' ');
+
             fontColor = new Color(
                 (int)MathHelper.Clamp(int.Parse(color[0]), 0, 255),
                 (int)MathHelper.Clamp(int.Parse(color[1]), 0, 255),
                 (int)MathHelper.Clamp(int.Parse(color[2]), 0, 255),
                 color.Length > 3 ? (int)MathHelper.Clamp(int.Parse(color[3]), 0, 255) : 255
                 );
-            /*
-            var color = typeof(Color).GetProperty(args, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-            if (color != null)
-            {
-                fontColor = (Color)color.GetValue(null, null);
-            }
-            */
+
             return 0;
         }
 

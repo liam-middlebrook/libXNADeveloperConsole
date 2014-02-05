@@ -23,7 +23,7 @@ namespace XNA_DevConsole
 
         KeyboardHelper keyHelper;
 
-        Color backgroudColor = Color.CornflowerBlue;
+        Color backgroudColor = Color.Black;
 
         ConsoleWindow console;
 
@@ -88,6 +88,7 @@ namespace XNA_DevConsole
                 this.Exit();
 
             console.Update(keyHelper);
+            System.Threading.Thread.Sleep(10);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
