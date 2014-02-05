@@ -87,6 +87,23 @@ namespace XNA_DevConsole.DevConsole
                         {
                             switch (pressedKeys[i])
                             {
+                                case Keys.Tab:
+                                    {
+                                        int keyIndex = -1;
+                                        List<string> commands = commandList.Keys.ToList();
+                                        for (int j = 0; j < commands.Count; j++)
+                                        {
+                                            if (commands[j].StartsWith(lineBuffer))
+                                            {
+                                                keyIndex = j;
+                                            }
+                                        }
+                                        if (keyIndex != -1)
+                                        {
+                                            lineBuffer = commands[keyIndex];
+                                        }
+                                        break;
+                                    }
                                 case Keys.OemPeriod:
                                     lineBuffer += ".";
                                     break;
