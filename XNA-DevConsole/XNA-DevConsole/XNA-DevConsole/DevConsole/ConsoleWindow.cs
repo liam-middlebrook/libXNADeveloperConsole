@@ -229,7 +229,7 @@ namespace XNA_DevConsole.DevConsole
         {
             if (isActive)
             {
-                spriteBatch.DrawString(font, "XNA Dev-Console\n | " + lineBuffer + " |" + "\n" + loggingQueue, Vector2.Zero, fontColor);
+                spriteBatch.DrawString(font, "XNA Dev-Console\n >| " + lineBuffer + "\n" + loggingQueue, Vector2.Zero, fontColor);
             }
         }
 
