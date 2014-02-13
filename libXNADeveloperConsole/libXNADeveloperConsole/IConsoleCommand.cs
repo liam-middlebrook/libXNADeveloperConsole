@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XNA_DevConsole.DevConsole
+namespace libXNADeveloperConsole
 {
-    delegate int ConsoleCommandDelegate(string args, LimitedMessageQueue loggingQueue);
+    public delegate int ConsoleCommandDelegate(string args, LimitedMessageQueue loggingQueue);
 
-    interface IConsoleCommand
+    public interface IConsoleCommand
     {
         string Name { get; }
 

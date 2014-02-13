@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XNA_DevConsole.DevConsole
+namespace libXNADeveloperConsole
 {
-    class ConsoleCommand : IConsoleCommand
+    public class ConsoleCommand : IConsoleCommand
     {
-        string name;
+        private string name;
 
-        ConsoleCommandDelegate function;
+        private ConsoleCommandDelegate function;
 
         public string Name { get { return name; } }
 

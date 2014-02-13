@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XNA_DevConsole.DevConsole
+namespace libXNADeveloperConsole
 {
-    class LimitedMessageQueue
+    public sealed class LimitedMessageQueue
     {
         private List<string> dataList;
         private int dataLimit;
-        public int DataLimit { get { return dataLimit; } set { dataLimit = value; } }
+
+        public int Capacity { get { return dataLimit; } set { dataLimit = value; } }
+        
         public LimitedMessageQueue(int limit)
         {
             dataList = new List<string>();

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 
-namespace XNA_DevConsole.DevConsole
+namespace libXNADeveloperConsole
 {
-    class KeyboardHelper
+    public sealed class KeyboardHelper
     {
         public static bool IsConsoleMode = false;
 

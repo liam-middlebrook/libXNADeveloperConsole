@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-using XNA_DevConsole.DevConsole;
+using libXNADeveloperConsole;
 
 namespace XNA_DevConsole
 {
@@ -53,7 +53,7 @@ namespace XNA_DevConsole
 
             console = new ConsoleWindow();
 
-            console.commandList.Add("changebackgroundcolor",
+           console.AddCommand(
                 new ConsoleCommand("changebackgroundcolor",
                     (string args, LimitedMessageQueue logQueue) =>
                     {
@@ -87,7 +87,7 @@ namespace XNA_DevConsole
                         return 0;
                     }));
 
-            console.commandList.Add("addgem",
+            console.AddCommand(
                 new ConsoleCommand("addgem",
                     (string args, LimitedMessageQueue logQueue) =>
                     {
@@ -140,7 +140,7 @@ namespace XNA_DevConsole
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            console.font = Content.Load<SpriteFont>("Consolas");
+            console.ConsoleFont = Content.Load<SpriteFont>("Consolas");
             gemTexture = Content.Load<Texture2D>("gem");
 
             // TODO: use this.Content to load your game content here
@@ -192,9 +192,9 @@ namespace XNA_DevConsole
                 gem.Draw(spriteBatch);
             }
 
-            if (!console.isActive)
+            if (!console.IsActive)
             {
-                spriteBatch.DrawString(console.font, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
+                spriteBatch.DrawString(console.ConsoleFont, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
             }
 
             console.Draw(spriteBatch);
