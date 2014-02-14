@@ -160,6 +160,7 @@ namespace libXNADeveloperConsole
                                 case Keys.OemClear:
                                 case Keys.OemCopy:
                                 case Keys.OemEnlW:
+                                case Keys.OemTilde:
                                 case Keys.Pa1:
                                 case Keys.PageDown:
                                 case Keys.PageUp:
@@ -205,7 +206,21 @@ namespace libXNADeveloperConsole
 
                                         #endregion
                                     }
-
+                                case Keys.OemOpenBrackets:
+                                    {
+                                        lineBuffer += "[";
+                                        break;
+                                    }
+                                case Keys.OemCloseBrackets:
+                                    {
+                                        lineBuffer += "]";
+                                        break;
+                                    }
+                                case Keys.OemPipe:
+                                    {
+                                        lineBuffer += "\\";
+                                        break;
+                                    }
                                 case Keys.OemPlus:
                                 case Keys.Add:
                                     {
