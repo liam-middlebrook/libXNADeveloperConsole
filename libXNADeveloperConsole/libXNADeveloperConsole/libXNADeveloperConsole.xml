@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>libXNADeveloperConsole</name>
+    </assembly>
+    <members>
+        <member name="T:libXNADeveloperConsole.LimitedMessageQueue">
+            <summary>
+            A limited message queue (LMQ) meant to store a limited number of strings in a queue format.
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.LimitedMessageQueue.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the limited message queue
+            </summary>
+            <param name="limit">The maximum number of elements in the queue at once.</param>
+        </member>
+        <member name="M:libXNADeveloperConsole.LimitedMessageQueue.Enqueue(System.String)">
+            <summary>
+            Enqueue a new string into the LMQ
+            </summary>
+            <param name="data">The string to enqueue</param>
+        </member>
+        <member name="M:libXNADeveloperConsole.LimitedMessageQueue.Clear">
+            <summary>
+            Clears the limited message queue
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.LimitedMessageQueue.ToString">
+            <summary>
+            A ToString for the LMQ
+            </summary>
+            <returns>A string containing every element in the LMQ</returns>
+        </member>
+        <member name="P:libXNADeveloperConsole.LimitedMessageQueue.Capacity">
+            <summary>
+            The maximum number of elements in the queue at once.
+            </summary>
+        </member>
+        <member name="T:libXNADeveloperConsole.ConsoleWindow">
+            <summary>
+            A virtual terminal class for XNA that will act as an in-game developer console
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.ConsoleWindow.GetInstance">
+            <summary>
+            Gets the instance of ConsoleWindow
+            </summary>
+            <returns>The instance of ConsoleWindow</returns>
+        </member>
+        <member name="M:libXNADeveloperConsole.ConsoleWindow.Update(libXNADeveloperConsole.KeyboardHelper)">
+            <summary>
+            Handles keyboard input to update the state of the console window
+            </summary>
+            <param name="keyHelper">A keyboard handler class that stores the current and previous keyboard states</param>
+        </member>
+        <member name="M:libXNADeveloperConsole.ConsoleWindow.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+            <summary>
+            Draws the console window to the screen
+            </summary>
+            <param name="spriteBatch">The spriteBatch object to draw the console to the screen with.</param>
+        </member>
+        <member name="M:libXNADeveloperConsole.ConsoleWindow.AddCommand(libXNADeveloperConsole.IConsoleCommand)">
+            <summary>
+            Adds a new Command to the list of console commands
+            </summary>
+            <param name="consoleCommand">The Command to add to the list</param>
+        </member>
+        <member name="P:libXNADeveloperConsole.ConsoleWindow.IsActive">
+            <summary>
+            Returns whether or not the Console Window is active (if the ~ key was pressed)
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.ConsoleWindow.ConsoleFont">
+            <summary>
+            Gets and Sets the font of the ConsoleWindow.
+            <remarks>If the value to set to is null nothing is changed.</remarks>
+            </summary>
+        </member>
+        <member name="T:libXNADeveloperConsole.KeyboardHelper">
+            <summary>
+            A KeyboardHelper class for XNA intended for use with libXNADeveloperConsole
+            </summary>
+        </member>
+        <member name="F:libXNADeveloperConsole.KeyboardHelper.IsConsoleMode">
+            <summary>
+            Is the Console Window Active?
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.KeyboardHelper.#ctor">
+            <summary>
+            Creates a new instance of the KeyboardHelper
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.KeyboardHelper.UpdateKeyStates">
+            <summary>
+            Updates the KeyStates for the KeyboardHelper
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.KeyboardHelper.KeyState">
+            <summary>
+            The keyboard state for the current update cycle.
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.KeyboardHelper.PrevKeyState">
+            <summary>
+            The keyboard state for the previous update cycle.
+            </summary>
+        </member>
+        <member name="T:libXNADeveloperConsole.ConsoleCommandDelegate">
+            <summary>
+            A delegate for a console command that the user will type in.
+            </summary>
+            <param name="args">The arguments typed after the command name</param>
+            <param name="loggingQueue">A logging queue for outputting information back to the console</param>
+            <returns>The error status code of the command</returns>
+        </member>
+        <member name="T:libXNADeveloperConsole.IConsoleCommand">
+            <summary>
+            An interface for a console command that the user will type in.
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.IConsoleCommand.Name">
+            <summary>
+            The Name of the Command as the User Will Type it In.
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.IConsoleCommand.Function">
+            <summary>
+            The Delegate that is called when the user types this command in.
+            </summary>
+        </member>
+        <member name="T:libXNADeveloperConsole.ConsoleCommand">
+            <summary>
+            An implementation of IConsoleCommand.
+            </summary>
+        </member>
+        <member name="M:libXNADeveloperConsole.ConsoleCommand.#ctor(System.String,libXNADeveloperConsole.ConsoleCommandDelegate)">
+            <summary>
+            Creates a new Instance of Console Command
+            </summary>
+            <param name="name">The Name the the console command will be addressed by in code.</param>
+            <param name="function">The delegate that is called when the user types in this command</param>
+        </member>
+        <member name="P:libXNADeveloperConsole.ConsoleCommand.Name">
+            <summary>
+            The Name the the console command will be addressed by in code.
+            </summary>
+        </member>
+        <member name="P:libXNADeveloperConsole.ConsoleCommand.Function">
+            <summary>
+            The delegate that is called when the user types in this command
+            </summary>
+        </member>
+    </members>
+</doc>
