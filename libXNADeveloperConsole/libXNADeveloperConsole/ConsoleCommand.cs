@@ -6,7 +6,7 @@ using System.Text;
 namespace libXNADeveloperConsole
 {
     /// <summary>
-    /// An implementation of <typeparamref name="IConsoleCommand"/>.
+    /// An implementation of IConsoleCommand.
     /// </summary>
     public class ConsoleCommand : IConsoleCommand
     {

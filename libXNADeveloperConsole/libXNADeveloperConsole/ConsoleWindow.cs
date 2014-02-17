@@ -14,8 +14,29 @@ using System.Reflection;
 
 namespace libXNADeveloperConsole
 {
+    /// <summary>
+    /// A virtual terminal class for XNA that will act as an in-game developer console
+    /// </summary>
     public class ConsoleWindow
     {
+        #region SINGLETON_ATTRIBUTES
+
+        private static ConsoleWindow _instance;
+
+        /// <summary>
+        /// Gets the instance of ConsoleWindow
+        /// </summary>
+        /// <returns>The instance of ConsoleWindow</returns>
+        public static ConsoleWindow GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ConsoleWindow();
+            }
+            return _instance;
+        }
+
+        #endregion
 
         #region Fields
 
@@ -41,23 +62,25 @@ namespace libXNADeveloperConsole
 
         #region Properties
 
+        /// <summary>
+        /// Returns whether or not the Console Window is active (if the ~ key was pressed)
+        /// </summary>
         public bool IsActive { get { return isActive; } }
 
+        /// <summary>
+        /// Gets and Sets the font of the ConsoleWindow.
+        /// <remarks>If the value to set to is null nothing is changed.</remarks>
+        /// </summary>
         public SpriteFont ConsoleFont
         {
             get { return font; }
             set { font = value ?? font; }
         }
 
-        public Color Color
-        {
-            get { return fontColor; }
-            set { fontColor = value; }
-        }
-
         #endregion
 
-        public ConsoleWindow()
+
+        private ConsoleWindow()
         {
             loggingQueue = new LimitedMessageQueue(5);
             commandList = new Dictionary<string, IConsoleCommand>();
@@ -71,6 +94,10 @@ namespace libXNADeveloperConsole
             AddDefaultCommands();
         }
 
+        /// <summary>
+        /// Handles keyboard input to update the state of the console window
+        /// </summary>
+        /// <param name="keyHelper">A keyboard handler class that stores the current and previous keyboard states</param>
         public void Update(KeyboardHelper keyHelper)
         {
             if (!keyHelper.KeyState.IsKeyDown(Keys.OemTilde) && keyHelper.PrevKeyState.IsKeyDown(Keys.OemTilde))
@@ -384,6 +411,10 @@ namespace libXNADeveloperConsole
             }
         }
 
+        /// <summary>
+        /// Draws the console window to the screen
+        /// </summary>
+        /// <param name="spriteBatch">The spriteBatch object to draw the console to the screen with.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             if (isActive)
@@ -392,6 +423,10 @@ namespace libXNADeveloperConsole
             }
         }
 
+        /// <summary>
+        /// Adds a new Command to the list of console commands
+        /// </summary>
+        /// <param name="consoleCommand">The Command to add to the list</param>
         public void AddCommand(IConsoleCommand consoleCommand)
         {
             commandList.Add(consoleCommand.Name, consoleCommand);
