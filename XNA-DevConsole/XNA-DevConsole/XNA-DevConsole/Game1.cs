@@ -25,8 +25,6 @@ namespace XNA_DevConsole
 
         Color backgroudColor = Color.Black;
 
-        ConsoleWindow console;
-
 
         List<GemGameDemo.Gem> gemList;
         Texture2D gemTexture;
@@ -51,9 +49,7 @@ namespace XNA_DevConsole
         {
             // TODO: Add your initialization logic here
 
-            console = new ConsoleWindow();
-
-           console.AddCommand(
+           ConsoleWindow.GetInstance().AddCommand(
                 new ConsoleCommand("changebackgroundcolor",
                     (string args, LimitedMessageQueue logQueue) =>
                     {
@@ -87,7 +83,7 @@ namespace XNA_DevConsole
                         return 0;
                     }));
 
-            console.AddCommand(
+            ConsoleWindow.GetInstance().AddCommand(
                 new ConsoleCommand("addgem",
                     (string args, LimitedMessageQueue logQueue) =>
                     {
@@ -140,7 +136,7 @@ namespace XNA_DevConsole
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            console.ConsoleFont = Content.Load<SpriteFont>("Consolas");
+            ConsoleWindow.GetInstance().ConsoleFont = Content.Load<SpriteFont>("Consolas");
             gemTexture = Content.Load<Texture2D>("gem");
 
             // TODO: use this.Content to load your game content here
@@ -167,7 +163,7 @@ namespace XNA_DevConsole
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            console.Update(keyHelper);
+            ConsoleWindow.GetInstance().Update(keyHelper);
             System.Threading.Thread.Sleep(10);
             // TODO: Add your update logic here
 
@@ -192,12 +188,13 @@ namespace XNA_DevConsole
                 gem.Draw(spriteBatch);
             }
 
-            if (!console.IsActive)
+            if (!ConsoleWindow.GetInstance().IsActive)
             {
-                spriteBatch.DrawString(console.ConsoleFont, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
+                spriteBatch.DrawString(ConsoleWindow.GetInstance().ConsoleFont, "Press ~ to open the developer console | Type 'help' for a list of commands.", new Vector2(10, 450), Color.White);
             }
 
-            console.Draw(spriteBatch);
+
+            ConsoleWindow.GetInstance().Draw(spriteBatch);
 
             spriteBatch.End();
 
